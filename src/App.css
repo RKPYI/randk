@@ -195,3 +195,49 @@ h2 em { color: var(--accent); font-style: normal; }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
   .tech-track { animation: none; }
 }
+
+/* ---------- Hero backdrop ---------- */
+.hero-visual { z-index: 1; }
+
+.hero-backdrop { position: absolute; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); overflow: hidden; pointer-events: none; z-index: 0; color: var(--accent); }
+
+.hb-grid {
+  position: absolute; inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, var(--line) 1px, transparent 0); background-size: 28px 28px; opacity: .55;
+  -webkit-mask-image: radial-gradient(ellipse 65% 70% at 68% 50%, #000 0%, transparent 78%);
+  mask-image: radial-gradient(ellipse 65% 70% at 68% 50%, #000 0%, transparent 78%);
+}
+
+/* Two soft glows that drift slowly in opposite directions. Gradients only (no blur filter), so they stay cheap. */
+.hb-glow { position: absolute; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; background: radial-gradient(circle, currentColor 0%, transparent 62%); }
+.hb-glow-a { left: 72%; top: 50%; width: min(70vw, 760px); opacity: .14; animation: hb-drift-a 16s ease-in-out infinite alternate; }
+.hb-glow-b { left: 16%; top: 66%; width: min(46vw, 520px); opacity: .08; animation: hb-drift-b 20s ease-in-out infinite alternate; }
+
+.hb-mote {
+  position: absolute; bottom: -12px; left: var(--x); width: var(--s); height: var(--s); border-radius: 50%;
+  background: currentColor; box-shadow: 0 0 6px currentColor; opacity: 0; animation: hb-rise var(--d) linear var(--w) infinite;
+}
+
+@keyframes hb-drift-a { from { transform: translate(-3%, 2%) scale(1); opacity: .11; } to { transform: translate(3%, -3%) scale(1.1); opacity: .18; } }
+@keyframes hb-drift-b { from { transform: translate(4%, -2%) scale(1.05); } to { transform: translate(-4%, 3%) scale(.95); } }
+@keyframes hb-rise {
+  0% { transform: translate3d(0, 0, 0); opacity: 0; }
+  12% { opacity: .55; }
+  85% { opacity: .3; }
+  100% { transform: translate3d(var(--dx), -92vh, 0); opacity: 0; }
+}
+
+/* Reuse the game's own IntersectionObserver: when the portrait is off screen, the backdrop stops animating too. */
+.hero:has(.is-offscreen) .hb-glow, .hero:has(.is-offscreen) .hb-mote { animation-play-state: paused; }
+
+/* Mobile: the portrait sits below the text. One glow sits behind the name, the other moves down with the portrait. */
+@media (max-width: 620px) {
+  .hb-glow-b { left: 38%; top: 190px; width: min(120vw, 480px); opacity: .22; }
+  .hb-glow-a { left: 50%; top: 74%; width: min(120vw, 520px); }
+  .hb-mote:nth-child(n + 14) { display: none; } /* keeps 10 motes on phones */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hb-glow, .hb-mote { animation: none !important; }
+  .hb-mote { opacity: .25; }
+}

@@ -2,18 +2,129 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="RanDK, the portfolio of Rangga Danu Kusuma. Web development, game development, and UI design." />
-    <meta name="theme-color" content="#f4f1ea" />
+
+    <!-- Primary -->
+    <title>Rangga Danu Kusuma | Web, Backend &amp; Game Developer Portfolio</title>
+    <meta name="description" content="Portfolio of Rangga Danu Kusuma (RanDK), a software engineering student at UNESA building web apps, backend APIs, and games. See projects and experience." />
+    <meta name="author" content="Rangga Danu Kusuma" />
+    <link rel="canonical" href="https://ranggadk.com/" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+    <!-- Appearance -->
+    <meta name="theme-color" content="#111b24" />
+    <meta name="color-scheme" content="dark light" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="RANDK" />
+    <meta property="og:title" content="Rangga Danu Kusuma | Web, Backend &amp; Game Developer" />
+    <meta property="og:description" content="Software engineering student building web experiences, backend systems, and games. Explore projects, experience, and certificates." />
+    <meta property="og:url" content="https://ranggadk.com/" />
+    <meta property="og:image" content="https://ranggadk.com/social-preview.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="RANDK, the portfolio of Rangga Danu Kusuma" />
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Rangga Danu Kusuma | Web, Backend &amp; Game Developer" />
+    <meta name="twitter:description" content="Software engineering student building web experiences, backend systems, and games." />
+    <meta name="twitter:image" content="https://ranggadk.com/social-preview.png" />
+    <meta name="twitter:image:alt" content="RANDK, the portfolio of Rangga Danu Kusuma" />
+
+    <!-- Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://avatars.githubusercontent.com" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
     <link rel="preconnect" href="https://opengraph.githubassets.com" />
-    <title>RANDK / Rangga Danu Kusuma</title>
+    <link rel="preload" as="image" href="/profile.png" fetchpriority="high" />
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Person",
+            "@id": "https://ranggadk.com/#person",
+            "name": "Rangga Danu Kusuma",
+            "alternateName": "RanDK",
+            "url": "https://ranggadk.com/",
+            "image": "https://ranggadk.com/profile.png",
+            "description": "Software engineering student focused on web experiences and backend systems, currently learning game development.",
+            "jobTitle": "Software Engineering Student",
+            "email": "mailto:romagading@gmail.com",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Surabaya",
+              "addressCountry": "ID"
+            },
+            "affiliation": {
+              "@type": "CollegeOrUniversity",
+              "name": "Universitas Negeri Surabaya"
+            },
+            "alumniOf": {
+              "@type": "EducationalOrganization",
+              "name": "SMKN 1 Dlanggu"
+            },
+            "knowsAbout": [
+              "Web development",
+              "Backend development",
+              "Game development",
+              "UI design",
+              "REST APIs",
+              "React",
+              "TypeScript",
+              "PHP",
+              "Laravel",
+              "Lua"
+            ],
+            "sameAs": [
+              "https://github.com/RKPYI",
+              "https://www.linkedin.com/in/rangga-danu-kusuma-62b34a310/"
+            ]
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://ranggadk.com/#website",
+            "url": "https://ranggadk.com/",
+            "name": "RANDK",
+            "description": "Portfolio of Rangga Danu Kusuma.",
+            "inLanguage": "en",
+            "publisher": { "@id": "https://ranggadk.com/#person" }
+          },
+          {
+            "@type": "ProfilePage",
+            "@id": "https://ranggadk.com/#profile",
+            "url": "https://ranggadk.com/",
+            "name": "Rangga Danu Kusuma | Web, Backend & Game Developer Portfolio",
+            "isPartOf": { "@id": "https://ranggadk.com/#website" },
+            "mainEntity": { "@id": "https://ranggadk.com/#person" },
+            "dateModified": "2026-10-05"
+          }
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <h1>Rangga Danu Kusuma</h1>
+      <p>Software engineering student at Universitas Negeri Surabaya building web experiences, backend systems, and games.</p>
+      <ul>
+        <li><a href="https://rantale.ranggadk.com">Rantale, a novel reading platform</a></li>
+        <li><a href="https://www.roblox.com/games/128506264671282/Cultivation-Incremental">Cultivation Incremental, a Roblox incremental game</a></li>
+        <li><a href="https://rkpyi.github.io/pokemon/">Idle Pokemon Catcher, a browser idle game</a></li>
+      </ul>
+      <p><a href="https://github.com/RKPYI">GitHub</a> · <a href="https://www.linkedin.com/in/rangga-danu-kusuma-62b34a310/">LinkedIn</a> · <a href="mailto:romagading@gmail.com">romagading@gmail.com</a></p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

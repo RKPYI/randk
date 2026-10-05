@@ -1,0 +1,19 @@
+{
+  "name": "RANDK / Rangga Danu Kusuma",
+  "short_name": "RANDK",
+  "description": "Portfolio of Rangga Danu Kusuma, a software engineering student building web, backend, and game projects.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "lang": "en",
+  "background_color": "#111b24",
+  "theme_color": "#111b24",
+  "categories": ["portfolio", "developer", "personal"],
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

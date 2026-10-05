@@ -4,6 +4,7 @@ import 'aos/dist/aos.css'
 import './App.css'
 import CultivationGame from './game/CultivationGame'
 import LoadingScreen from './LoadingScreen'
+import HeroBackdrop from './HeroBackdrop'
 
 const projects = [
   {
@@ -113,6 +114,7 @@ function App() {
       </nav>
 
       <section className="hero shell" id="main-content">
+        <HeroBackdrop />
         <div className="hero-copy reveal">
           <p className="kicker">Web Developer</p>
           <h1>Rangga<br />Danu<br />Kusuma</h1>
