@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import './App.css'
+import CultivationGame from './game/CultivationGame'
+import LoadingScreen from './LoadingScreen'
 
 const projects = [
   {
@@ -76,11 +78,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setIsLoading(false), 1000)
-    return () => window.clearTimeout(timer)
-  }, [])
-
-  useEffect(() => {
     document.documentElement.classList.toggle('loading-lock', isLoading)
     return () => document.documentElement.classList.remove('loading-lock')
   }, [isLoading])
@@ -98,14 +95,8 @@ function App() {
 
   return (
     <>
-      <div className={`loading-screen${isLoading ? '' : ' loading-screen-done'}`} aria-hidden={!isLoading}>
-        <div className="loading-content">
-          <span className="loading-mark">RANDK<span>.</span></span>
-          <span className="loading-label">Loading portfolio</span>
-          <span className="loading-line" aria-hidden="true" />
-        </div>
-      </div>
-      <main className={nightMode ? 'site night' : 'site'} id="top">
+      <LoadingScreen done={!isLoading} onFinish={() => setIsLoading(false)} />
+      <main className={`site${nightMode ? ' night' : ''}${isLoading ? ' is-loading' : ''}`} id="top">
       <a className="skip-link" href="#main-content">Skip to content</a>
       <nav className="nav shell" aria-label="Main navigation">
         <a className="wordmark" href="#top" aria-label="RanDK home">RANDK<span>.</span></a>
@@ -133,15 +124,8 @@ function App() {
           </div>
         </div>
         <div className="hero-visual reveal delay-one">
-          <div className="orbit orbit-one" />
-          <div className="orbit orbit-two" />
-          <div className="portrait-frame">
-            <img src="/profile.png" width="320" height="427" fetchPriority="high" alt="Rangga Danu Kusuma" />
-            <span className="portrait-tag">Surabaya, ID</span>
-          </div>
-          <p className="visual-note">Currently exploring<br /><strong>Luau + UI design</strong></p>
+          <CultivationGame />
         </div>
-        <div className="hero-side-note">Scroll to explore <span aria-hidden="true">↓</span></div>
       </section>
 
       <section className="statement shell" id="about" data-aos="fade-up">

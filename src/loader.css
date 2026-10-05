@@ -1,0 +1,89 @@
+/* Loading screen. Always dark, whatever the site theme is, and its accent follows the game: blue, violet from Foundation, gold on ascension. */
+.loader {
+  --l-bg: #111b24; --l-ink: #edf3f7; --l-muted: #a9b7c0; --l-line: #334651; --l-accent: #71a0ff;
+  position: fixed; inset: 0; z-index: 20; overflow: hidden; color: var(--l-ink); font-family: 'Space Grotesk', sans-serif;
+}
+.loader.is-violet { --l-accent: #a893ff; }
+.loader.is-ascended { --l-accent: #f5c04a; }
+.loader-sr { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+
+/* Two halves meet at the centre line and part on exit, like a cut. */
+.loader-half { position: absolute; left: 0; right: 0; height: 50.3%; background: var(--l-bg); transition: transform .8s cubic-bezier(.77, 0, .18, 1) .3s; }
+.loader-top { top: 0; }
+.loader-bottom { bottom: 0; }
+.loader.is-done .loader-top { transform: translateY(-101%); }
+.loader.is-done .loader-bottom { transform: translateY(101%); }
+.loader.is-done { visibility: hidden; pointer-events: none; transition: visibility 0s linear 1.25s; }
+
+.loader-stage { position: absolute; inset: 0; display: grid; place-items: center; transition: opacity .35s ease, transform .5s cubic-bezier(.16, 1, .3, 1); }
+.loader.is-done .loader-stage { opacity: 0; transform: scale(1.06); transition-delay: .12s; }
+.loader-stage::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(circle at 1px 1px, var(--l-line) 1px, transparent 0); background-size: 28px 28px; opacity: .45;
+  -webkit-mask-image: radial-gradient(circle at 50% 46%, #000 0%, transparent 70%); mask-image: radial-gradient(circle at 50% 46%, #000 0%, transparent 70%);
+}
+
+.loader-seam { position: absolute; left: 0; right: 0; top: 50%; height: 2px; margin-top: -1px; background: var(--l-accent); box-shadow: 0 0 24px 4px var(--l-accent); opacity: 0; transform: scaleX(0); pointer-events: none; }
+.loader.is-done .loader-seam { animation: ld-seam .7s ease-out both; }
+@keyframes ld-seam { 0% { opacity: 1; transform: scaleX(0); } 35% { opacity: 1; transform: scaleX(1); } 100% { opacity: 0; transform: scaleX(1); } }
+
+/* A soft pulse each time a new realm is reached. */
+.loader-flash { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at 50% 44%, var(--l-accent) 0%, transparent 55%); opacity: 0; animation: ld-flash .7s ease-out; }
+@keyframes ld-flash { 12% { opacity: .22; } 100% { opacity: 0; } }
+
+/* ---------- Corners ---------- */
+.loader-corner { position: absolute; display: grid; gap: 4px; color: var(--l-muted); font: 10px 'DM Mono', monospace; letter-spacing: .04em; }
+.loader-corner strong { color: var(--l-ink); font: 700 18px 'Space Grotesk', sans-serif; letter-spacing: -.06em; }
+.loader-corner strong span { color: var(--l-accent); }
+.loader-tl { top: 26px; left: 28px; }
+.loader-tr { top: 26px; right: 28px; text-align: right; }
+.loader-bl { bottom: 30px; left: 28px; }
+.loader-br { bottom: 22px; right: 28px; text-align: right; }
+.loader-percent { color: var(--l-ink); font: 500 clamp(2.2rem, 6vw, 4rem)/1 'DM Mono', monospace; letter-spacing: -.05em; }
+.loader-percent small { margin-left: 2px; color: var(--l-accent); font-size: .4em; letter-spacing: 0; }
+
+/* ---------- Centre ---------- */
+.loader-center { position: relative; display: grid; justify-items: center; padding: 0 24px; text-align: center; }
+.loader-formation { width: min(46vw, 250px); height: auto; overflow: visible; color: var(--l-accent); }
+.ld-glow { animation: ld-glow 3s ease-in-out infinite; }
+.ld-spin { transform-origin: 100px 100px; animation: ld-spin 36s linear infinite; }
+.ld-slow { animation-duration: 60s; }
+.ld-reverse { animation-direction: reverse; animation-duration: 28s; }
+.ld-orb { transform-origin: 100px 100px; transform: scale(calc(.5 + var(--fill, 0) * .5)); }
+.ld-seal { fill: #0b1218; font-family: 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif; transform-box: fill-box; transform-origin: center; animation: ld-pop .5s cubic-bezier(.34, 1.56, .64, 1) both; }
+@keyframes ld-spin { to { transform: rotate(360deg); } }
+@keyframes ld-glow { 50% { opacity: .55; } }
+@keyframes ld-pop { from { opacity: 0; transform: scale(.4); } }
+
+.loader-mark { display: flex; margin-top: 8px; font-size: clamp(3.2rem, 11vw, 6.4rem); font-weight: 700; letter-spacing: -.1em; line-height: .95; }
+.loader-mark span { display: inline-block; animation: ld-letter .7s cubic-bezier(.16, 1, .3, 1) both; }
+.loader-mark em { color: var(--l-accent); font-style: normal; animation: ld-letter .7s cubic-bezier(.16, 1, .3, 1) .5s both; }
+@keyframes ld-letter { from { opacity: 0; transform: translateY(40%); } }
+
+.loader-realm { margin: 14px 0 0; color: var(--l-ink); font: 500 12px 'DM Mono', monospace; letter-spacing: .06em; text-transform: uppercase; animation: ld-rise .4s ease-out both; }
+.loader-line { display: flex; align-items: center; justify-content: center; height: 18px; margin: 6px 0 0; color: var(--l-muted); font: 11px 'DM Mono', monospace; }
+.loader-line span { display: inline-block; overflow: hidden; white-space: nowrap; animation: ld-type .55s steps(30) both; }
+.loader-line i { width: 6px; height: 12px; margin-left: 4px; background: var(--l-accent); animation: ld-blink .8s steps(1) infinite; }
+.loader-skip { margin: 26px 0 0; color: var(--l-muted); font: 10px 'DM Mono', monospace; letter-spacing: .04em; opacity: 0; transition: opacity .4s ease; }
+.loader-skip.is-visible { opacity: .7; }
+@keyframes ld-rise { from { opacity: 0; transform: translateY(6px); } }
+@keyframes ld-type { from { max-width: 0; } to { max-width: 44ch; } }
+@keyframes ld-blink { 50% { opacity: 0; } }
+
+.loader-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--l-line); }
+.loader-bar i { display: block; width: 100%; height: 100%; background: var(--l-accent); transform: scaleX(0); transform-origin: left; }
+
+@media (max-width: 620px) {
+  .loader-tl, .loader-tr { top: 18px; }
+  .loader-tl, .loader-bl { left: 18px; }
+  .loader-tr, .loader-br { right: 18px; }
+  .loader-bl { bottom: 24px; }
+  .loader-br { bottom: 18px; }
+}
+
+/* Reduced motion: no spinning, typing or reveals. The run itself is short and still honest. */
+@media (prefers-reduced-motion: reduce) {
+  .loader *, .loader *::before { animation: none !important; }
+  .loader-half, .loader-stage { transition: none; }
+  .loader.is-done { transition: none; }
+}

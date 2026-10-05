@@ -1,0 +1,217 @@
+/* ---------- Layout ---------- */
+.cultivation-game { position: relative; width: 100%; display: grid; justify-items: center; }
+.portrait-stage { position: relative; width: min(100%, 390px); }
+
+/* The portrait is a <button>, so reset what buttons add and pin the image inside the frame. */
+.cultivation-game .cultivation-portrait {
+  position: relative; z-index: 1; display: block; width: 100%; overflow: visible;
+  font: inherit; color: inherit; text-align: left; cursor: pointer;
+  touch-action: manipulation; user-select: none; -webkit-user-select: none;
+  -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
+  transition: transform .12s ease, box-shadow .25s ease;
+}
+.cultivation-game .cultivation-portrait img { position: absolute; inset: 14px; width: calc(100% - 28px); height: calc(100% - 28px); -webkit-user-drag: none; pointer-events: none; }
+.cultivation-game .cultivation-portrait:active { transform: translate(3px, 3px) scale(.99); box-shadow: 14px 14px 0 var(--accent); }
+.cultivation-portrait:focus-visible, .cultivation-toggle:focus-visible, .breakthrough-button:focus-visible, .upgrade-row button:focus-visible, .reset-progress:focus-visible {
+  outline: 3px solid var(--accent); outline-offset: 4px;
+}
+
+/* ---------- HUD ---------- */
+.cultivation-hud { position: relative; z-index: 1; width: min(100%, 390px); padding-top: 22px; }
+.cultivation-stats { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; color: var(--muted); font: 11px 'DM Mono', monospace; }
+.cultivation-stats strong { color: var(--ink); font-size: 15px; font-weight: 500; }
+.qi-progress { height: 4px; margin-top: 12px; overflow: hidden; background: var(--line); }
+.qi-progress i { display: block; height: 100%; background: var(--accent); transition: width .2s ease; }
+.qi-target { display: block; margin-top: 8px; color: var(--muted); font: 10px 'DM Mono', monospace; }
+.cultivation-hud .visual-note { margin-top: 14px; text-align: left; }
+.cultivation-hint { margin: 12px 0 0; color: var(--muted); font: 11px 'DM Mono', monospace; }
+
+.cultivation-actions { position: relative; z-index: 1; display: flex; justify-content: flex-end; width: min(100%, 390px); margin-top: 14px; }
+.cultivation-toggle { padding: 9px 12px; border: 0; background: var(--accent); color: var(--paper); cursor: pointer; font: 11px 'DM Mono', monospace; }
+
+/* ---------- Breakthrough (hold to channel) ---------- */
+.breakthrough-button {
+  position: relative; display: block; width: 100%; margin-top: 14px; padding: 12px 12px 14px; overflow: hidden;
+  border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer;
+  font: 11px 'DM Mono', monospace; text-align: left;
+  touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
+}
+.channel-fill { position: absolute; left: 0; bottom: 0; width: 100%; height: 4px; background: var(--accent); transform: scaleX(0); transform-origin: left; }
+.breakthrough-button.is-holding .channel-fill { animation: channel var(--channel-ms, 1800ms) linear forwards; }
+@keyframes channel { to { transform: scaleX(1); } }
+.is-channeling .cultivation-portrait { box-shadow: 20px 20px 0 var(--accent), 0 0 44px var(--accent); animation: tremble .1s linear infinite; }
+@keyframes tremble { 25% { translate: 1px -1px; } 75% { translate: -1px 1px; } }
+
+/* ---------- Upgrades ---------- */
+.upgrade-panel {
+  position: absolute; z-index: 5; top: calc(100% + 6px); left: 0; right: 0; max-height: min(70vh, 460px); overflow: auto;
+  padding: 18px; background: var(--paper); border: 1px solid var(--line); box-shadow: 10px 10px 0 var(--shadow);
+}
+.upgrade-panel h3 { font-size: 20px; }
+.upgrade-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 0; border-top: 1px solid var(--line); }
+.upgrade-row strong, .upgrade-row small { display: block; }
+.upgrade-row strong { font-size: 13px; }
+.upgrade-row small { margin-top: 4px; color: var(--muted); font: 10px 'DM Mono', monospace; }
+.upgrade-row button { min-width: 62px; padding: 8px 6px; border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; font: 11px 'DM Mono', monospace; }
+.upgrade-row button:not(:disabled):hover { background: var(--accent); color: var(--paper); }
+.upgrade-row button:disabled { cursor: not-allowed; opacity: .5; }
+.panel-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.upgrade-panel h3 { margin: 0; }
+.panel-qi { margin: 4px 0 0; color: var(--muted); font: 10px 'DM Mono', monospace; }
+.panel-close { width: 28px; height: 28px; margin: -4px -6px 0 0; border: 0; background: none; color: var(--muted); cursor: pointer; font: 18px/1 'DM Mono', monospace; }
+.panel-close:hover { color: var(--accent); }
+.panel-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* Desktop and tablet: the panel floats at the right edge of the viewport, so it stays reachable wherever the page is scrolled.
+   The portrait slides left (--panel-shift, set from JS) so the two sit side by side. */
+@media (min-width: 621px) {
+  /* The hero entrance animation holds a transform after it ends, which would trap position: fixed inside the hero. */
+  .hero-visual.reveal { animation-fill-mode: backwards; }
+  .upgrade-panel { position: fixed; z-index: 30; top: 50%; right: 24px; left: auto; width: 300px; max-height: min(72dvh, 540px); translate: 0 -50%; animation: panel-in .3s cubic-bezier(.16, 1, .3, 1) both; }
+  .cultivation-game .portrait-stage, .cultivation-game .cultivation-hud, .cultivation-game .cultivation-actions { transition: transform .4s cubic-bezier(.16, 1, .3, 1); }
+  .panel-open .portrait-stage, .panel-open .cultivation-hud, .panel-open .cultivation-actions { transform: translateX(var(--panel-shift, 0px)); }
+}
+@keyframes panel-in { from { opacity: 0; transform: translateX(18px); } }
+.upgrade-more { margin: 4px 0 0; padding-top: 11px; border-top: 1px solid var(--line); color: var(--muted); font: 10px 'DM Mono', monospace; }
+.reset-progress { margin-top: 14px; padding: 0; border: 0; background: none; color: var(--muted); cursor: pointer; font: 10px 'DM Mono', monospace; text-decoration: underline; }
+
+/* ---------- Feedback ---------- */
+.qi-floater { position: absolute; z-index: 3; color: var(--accent); pointer-events: none; font: 500 13px 'DM Mono', monospace; transform: translate(-50%, -50%); animation: qi-rise .9s ease-out forwards; }
+@keyframes qi-rise { to { opacity: 0; transform: translate(-50%, calc(-50% - 56px)); } }
+/* Notifications: styled like the portrait frame (ink border, accent offset shadow). Click-through except the close button. */
+.cultivation-toasts { position: absolute; z-index: 6; top: 10px; left: 10px; right: 10px; display: grid; gap: 10px; pointer-events: none; }
+.cultivation-toast {
+  position: relative; display: grid; grid-template-columns: auto 1fr auto; align-items: start; gap: 12px; padding: 12px 10px 15px 12px; overflow: hidden;
+  background: var(--paper); color: var(--ink); border: 1px solid var(--ink); box-shadow: 5px 5px 0 var(--accent);
+  animation: toast-in .38s cubic-bezier(.34, 1.56, .64, 1) both;
+}
+.cultivation-toast.is-leaving { animation: toast-out .22s ease-in forwards; }
+@keyframes toast-in { from { opacity: 0; transform: translateY(-14px) scale(.95); } }
+@keyframes toast-out { to { opacity: 0; transform: translateX(14px); } }
+.toast-seal { display: grid; place-items: center; width: 38px; height: 38px; border: 1px solid var(--accent); color: var(--accent); font: 600 20px/1 'Noto Serif SC', 'Songti SC', 'STSong', 'SimSun', serif; }
+.toast-ascend .toast-seal { background: var(--accent); color: var(--paper); }
+.toast-secret .toast-seal { border-style: dashed; }
+.toast-copy strong { display: block; font-size: 14px; font-weight: 600; letter-spacing: -.02em; line-height: 1.2; }
+.toast-copy p { margin: 4px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
+.toast-close { pointer-events: auto; width: 28px; height: 28px; margin: -4px 0 0; border: 0; background: none; color: var(--muted); cursor: pointer; font: 18px/1 'DM Mono', monospace; }
+.toast-close:hover { color: var(--accent); }
+.toast-close:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.toast-timer { position: absolute; left: 0; bottom: 0; width: 100%; height: 3px; background: var(--accent); transform-origin: left; animation: toast-drain linear forwards; }
+@keyframes toast-drain { to { transform: scaleX(0); } }
+.cultivation-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+
+.ascension-card { display: grid; gap: 5px; width: min(100%, 390px); margin-top: 18px; padding: 16px; border: 1px solid var(--accent); background: var(--paper-deep); font-size: 13px; }
+.ascension-card span { color: var(--muted); }
+.ascension-card a { color: var(--accent); font: 11px 'DM Mono', monospace; }
+
+/* Breakthrough and ascension effects. Fixed-position overlays would be trapped by the hero's transform, so these live in the stage. */
+.tribulation-flash { position: absolute; inset: -60px; z-index: 2; pointer-events: none; background: radial-gradient(circle, var(--accent) 0%, transparent 62%); opacity: 0; animation: flash .9s ease-out; }
+@keyframes flash { 15% { opacity: .5; } 100% { opacity: 0; } }
+.fx-break .portrait-stage, .fx-ascend .portrait-stage { animation: shake .5s ease-out; }
+@keyframes shake { 20% { translate: -5px 2px; } 40% { translate: 5px -2px; } 60% { translate: -3px 1px; } 80% { translate: 2px 0; } }
+.ascension-burst { position: absolute; inset: 0; z-index: 4; display: grid; place-items: center; pointer-events: none; }
+.ascension-burst i { grid-area: 1 / 1; width: 3px; height: 28px; border-radius: 2px; background: var(--accent); opacity: 0; transform: rotate(var(--a)) translateY(-50px); animation: burst 1.9s ease-out forwards; }
+@keyframes burst { 10% { opacity: 1; } 100% { opacity: 0; transform: rotate(var(--a)) translateY(-300px) scaleY(2); } }
+
+/* ---------- Realm rewards (cumulative) ---------- */
+/* 1+: aura ring around the portrait. 2+: a second, fainter ring. */
+.has-aura .portrait-stage::before, .has-aura-2 .portrait-stage::after {
+  content: ''; position: absolute; z-index: 0; inset: -16px; border: 1px solid var(--accent); border-radius: 6px; opacity: .4; pointer-events: none; animation: aura 3.2s ease-in-out infinite;
+}
+.has-aura-2 .portrait-stage::after { inset: -30px; opacity: .22; animation-delay: -1.6s; }
+@keyframes aura { 50% { transform: scale(1.04); opacity: .1; } }
+
+/* 3+: drifting Qi particles. */
+.cultivation-particles { position: absolute; inset: -6% -8%; z-index: 0; overflow: hidden; pointer-events: none; }
+.cultivation-particles i { position: absolute; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); opacity: .35; animation: qi-drift 7s ease-in-out infinite alternate; }
+.cultivation-particles i:nth-child(3n) { animation-duration: 9s; }
+.cultivation-particles i:nth-child(3n + 1) { animation-duration: 11s; }
+@keyframes qi-drift { to { transform: translate(18px, -28px); opacity: .8; } }
+
+/* 4+: the cursor becomes a spirit orb. A sharp dot tracks the pointer exactly; a ring trails behind it.
+   Elements are created in JS and live in .site, so they inherit --accent. Touch devices get a tap ripple instead. */
+html.soul-cursor, html.soul-cursor * { cursor: none !important; }
+.soul-cursor-dot, .soul-cursor-ring { position: fixed; z-index: 100; top: 0; left: 0; border-radius: 50%; opacity: 0; pointer-events: none; }
+.soul-cursor-dot { width: 8px; height: 8px; margin: -4px 0 0 -4px; background: var(--accent); box-shadow: 0 0 8px var(--accent), 0 0 20px var(--accent); transition: opacity .2s ease; }
+.soul-cursor-ring { width: 34px; height: 34px; margin: -17px 0 0 -17px; border: 1px solid var(--accent); transition: opacity .2s ease, transform .2s cubic-bezier(.16, 1, .3, 1), background-color .2s ease; }
+.soul-cursor-dot.is-visible { opacity: 1; }
+.soul-cursor-ring.is-visible { opacity: .75; }
+.soul-cursor-ring.is-active { transform: scale(1.5); background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.soul-cursor-ring.is-down { transform: scale(.7); }
+.soul-ripple { position: fixed; z-index: 100; width: 24px; height: 24px; margin: -12px 0 0 -12px; border: 1px solid var(--accent); border-radius: 50%; pointer-events: none; animation: soul-ripple .7s ease-out forwards; }
+@keyframes soul-ripple { from { opacity: .8; transform: scale(.3); } to { opacity: 0; transform: scale(3.4); } }
+
+/* ---------- Realm overlays (SVG laid over the portrait photo, one piece of art per realm) ---------- */
+/* Same inset as the photo, so the 300 x 380 art lines up with it. Click-through, so the portrait still gathers Qi. */
+.cultivation-game .realm-overlay { position: absolute; inset: 14px; width: calc(100% - 28px); height: calc(100% - 28px); pointer-events: none; animation: overlay-in .9s ease both; }
+@keyframes overlay-in { from { opacity: 0; } }
+.ov-r0 { color: #dbe8ff; }
+.ov-r1 { color: #bfe6ff; }
+.ov-r2 { color: #d9ccff; }
+.ov-r3 { color: #f5c04a; }
+.ov-r4 { color: #9ff0e0; }
+.ov-r5 { color: #e8b0ff; }
+.ov-r6 { color: #ffd982; }
+.ov-spin { animation: ov-spin 60s linear infinite; }
+.ov-flow { animation: ov-flow 7s linear infinite; }
+.ov-pulse { animation: ov-pulse 4s ease-in-out infinite; }
+.ov-breathe { animation: ov-breathe 4s ease-in-out infinite; }
+.ov-float { animation: ov-float 5s ease-in-out infinite; }
+.ov-drift { animation: ov-drift 10s ease-in-out infinite alternate; }
+.ov-twinkle { transform-box: fill-box; transform-origin: center; animation: ov-twinkle 2.6s ease-in-out infinite; }
+@keyframes ov-spin { to { transform: rotate(360deg); } }
+@keyframes ov-flow { to { stroke-dashoffset: -56; } }
+@keyframes ov-pulse { 50% { opacity: .15; } }
+@keyframes ov-breathe { 50% { transform: scale(1.12); opacity: .75; } }
+@keyframes ov-float { 50% { transform: translateY(-6px); } }
+@keyframes ov-drift { from { transform: translateX(-26px); } to { transform: translateX(26px); } }
+@keyframes ov-twinkle { 50% { opacity: .15; transform: scale(.5); } }
+.is-offscreen .realm-overlay * { animation-play-state: paused; }
+
+/* Pause decoration while the hero is off screen. */
+.is-offscreen .cultivation-particles i, .is-offscreen .portrait-stage::before, .is-offscreen .portrait-stage::after { animation-play-state: paused; }
+
+/* 2+: theme shift. Body classes beat the .site / .site.night variable blocks in App.css on specificity. */
+body.cult-r2 .site { --accent: #5a3fd6; --accent-dark: #402a9f; }
+body.cult-r2 .site.night { --accent: #a893ff; --accent-dark: #c4b6ff; }
+/* 5+: the hero name lights up under the cursor. */
+body.cult-r5 .hero h1 {
+  background: radial-gradient(circle 190px at var(--name-x, -500px) var(--name-y, -500px), var(--accent) 0%, transparent 100%), linear-gradient(var(--ink), var(--ink));
+  -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent;
+}
+/* 6: ascended. Gold accent and a badge next to the wordmark. */
+body.cult-r6 .site { --accent: #9a5b00; --accent-dark: #6f4100; }
+body.cult-r6 .site.night { --accent: #f5c04a; --accent-dark: #ffd982; }
+body.cult-r6 .wordmark::after { content: 'ASCENDED'; margin-left: 10px; padding: 3px 7px; border: 1px solid var(--accent); color: var(--accent); font: 500 9px 'DM Mono', monospace; letter-spacing: .04em; vertical-align: middle; }
+
+/* ---------- Reveal and clean view ---------- */
+/* Game UI fades in the first time the portrait is pressed. */
+.game-reveal { animation: game-reveal .6s cubic-bezier(.16, 1, .3, 1) backwards; }
+@keyframes game-reveal { from { opacity: 0; translate: 0 8px; } }
+/* Toggle for the portrait decoration: a small vertical tab on the left edge of the frame. */
+.cultivation-game .overlay-toggle {
+  position: absolute; z-index: 2; top: 18px; right: calc(100% + 6px); padding: 10px 6px; border: 0;
+  background: var(--ink); color: var(--paper); cursor: pointer; opacity: .85; white-space: nowrap;
+  font: 10px 'DM Mono', monospace; letter-spacing: .02em; writing-mode: vertical-rl; transform: rotate(180deg);
+  transition: opacity .2s ease, background .2s ease;
+}
+.cultivation-game .overlay-toggle:hover { opacity: 1; background: var(--accent); }
+.overlay-toggle:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+
+/* ---------- Motion preferences ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .cultivation-portrait, .qi-progress i, .soul-cursor-ring { transition: none; }
+  .cultivation-particles, .soul-ripple, .tribulation-flash, .ascension-burst, .toast-timer { display: none; }
+  .cultivation-toast, .cultivation-toast.is-leaving, .upgrade-panel { animation: none; }
+  .cultivation-game .portrait-stage, .cultivation-game .cultivation-hud, .cultivation-game .cultivation-actions { transition: none; }
+  .qi-floater, .game-reveal { animation: none; }
+  .cultivation-game .realm-overlay, .realm-overlay * { animation: none; }
+  .has-aura .portrait-stage::before, .has-aura-2 .portrait-stage::after, .fx-break .portrait-stage, .fx-ascend .portrait-stage, .is-channeling .cultivation-portrait { animation: none; }
+  .has-aura-2 .portrait-stage::after { display: none; }
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 620px) {
+  .upgrade-panel { position: static; width: min(100%, 390px); margin-top: 10px; }
+  .has-aura-2 .portrait-stage::after { display: none; }
+}
