@@ -31,19 +31,19 @@ const certificates = [
   {
     title: 'Hack Club Stardance Challenge',
     detail: 'Certificate of Achievement · 3 projects · 76 hours',
-    image: '/stardance-certificate.pdf',
+    image: '/stardance-certificate.jpg',
     href: '/stardance-certificate.pdf',
   },
   {
     title: 'Web Technologies',
     detail: 'LKS Pendidikan Menengah Tingkat Provinsi Jawa Timur · 25 April 2025',
-    image: '/web-technologies-certificate.pdf',
+    image: '/web-technologies-certificate.jpg',
     href: '/web-technologies-certificate.pdf',
   },
   {
     title: 'Jagoan Hosting Infra Competition',
     detail: 'Top 30 Nasional · 8 November 2025',
-    image: '/infra-competition-certificate.pdf',
+    image: '/infra-competition-certificate.jpg',
     href: '/infra-competition-certificate.pdf',
   },
 ]
@@ -223,7 +223,7 @@ function App() {
               {certificates.map((certificate) => (
                 <a className="certificate-entry" href={certificate.href} target="_blank" rel="noreferrer" key={certificate.title}>
                   <div className="certificate-preview">
-                    <iframe src={certificate.image} title={`${certificate.title} certificate preview`} />
+                    <img src={certificate.image} alt={`${certificate.title} certificate preview`} loading="lazy" />
                   </div>
                   <div className="certificate-copy">
                     <h3>{certificate.title}</h3>
