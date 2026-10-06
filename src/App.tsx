@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 import './App.css'
@@ -147,14 +147,66 @@ const technologyMarquee = [
   { name: 'SQLite', icon: 'sqlite/sqlite-original.svg' },
 ]
 
+const navLinks = [
+  { id: 'about', label: 'About' },
+  { id: 'services', label: 'Services' },
+  { id: 'journey', label: 'Journey' },
+  { id: 'achievements', label: 'Achievements' },
+  { id: 'work', label: 'Work' },
+]
+
 function App() {
   const [nightMode, setNightMode] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [activeSection, setActiveSection] = useState('')
 
   useEffect(() => {
     document.documentElement.classList.toggle('loading-lock', isLoading)
     return () => document.documentElement.classList.remove('loading-lock')
   }, [isLoading])
+
+  // Slim border appears once the page scrolls under the bar.
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Highlights the section currently in the middle of the viewport.
+  useEffect(() => {
+    const ids = ['main-content', ...navLinks.map((l) => l.id), 'contact']
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) setActiveSection(entry.target.id === 'main-content' ? '' : entry.target.id)
+        })
+      },
+      { rootMargin: '-40% 0px -55% 0px' },
+    )
+    ids.forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) observer.observe(el)
+    })
+    return () => observer.disconnect()
+  }, [])
+
+  // Mobile menu: lock page scroll, close on Escape or when the viewport grows to desktop size.
+  useEffect(() => {
+    document.documentElement.classList.toggle('menu-lock', menuOpen)
+    if (!menuOpen) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setMenuOpen(false)
+    const onResize = () => window.innerWidth > 900 && setMenuOpen(false)
+    window.addEventListener('keydown', onKey)
+    window.addEventListener('resize', onResize)
+    return () => {
+      document.documentElement.classList.remove('menu-lock')
+      window.removeEventListener('keydown', onKey)
+      window.removeEventListener('resize', onResize)
+    }
+  }, [menuOpen])
 
   useEffect(() => {
     AOS.init({
@@ -172,21 +224,61 @@ function App() {
       <LoadingScreen done={!isLoading} onFinish={() => setIsLoading(false)} />
       <main className={`site${nightMode ? ' night' : ''}${isLoading ? ' is-loading' : ''}`} id="top">
       <a className="skip-link" href="#main-content">Skip to content</a>
-      <nav className="nav shell" aria-label="Main navigation">
-        <a className="wordmark" href="#top" aria-label="RanDK home">RANDK<span>.</span></a>
-        <div className="nav-links">
-          <a href="#work">Work</a>
-          <a href="#about">About</a>
-          <a href="#services">Services</a>
-          <a href="#journey">Journey</a>
-          <a href="#achievements">Achievements</a>
-          <a href="#contact">Contact</a>
+      <header className={`nav-wrap${scrolled ? ' is-scrolled' : ''}${menuOpen ? ' is-open' : ''}`}>
+        <nav className="nav shell" aria-label="Main navigation">
+          <a className="wordmark" href="#top" aria-label="RanDK home" onClick={() => setMenuOpen(false)}>RANDK<span>.</span></a>
+
+          <div className="nav-links">
+            {navLinks.map((link) => (
+              <a key={link.id} href={`#${link.id}`} className={activeSection === link.id ? 'is-active' : undefined} aria-current={activeSection === link.id ? 'true' : undefined}>
+                {link.label}
+              </a>
+            ))}
+          </div>
+
+          <div className="nav-actions">
+            <button className="icon-button" type="button" onClick={() => setNightMode(!nightMode)} aria-label={nightMode ? 'Switch to day mode' : 'Switch to night mode'}>
+              {nightMode ? (
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4" />
+                </svg>
+              ) : (
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />
+                </svg>
+              )}
+            </button>
+            <a className="nav-cta" href="#contact">Contact</a>
+            <button
+              className={`icon-button menu-button${menuOpen ? ' is-open' : ''}`}
+              type="button"
+              onClick={() => setMenuOpen((open) => !open)}
+              aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={menuOpen}
+              aria-controls="mobile-menu"
+            >
+              <span className="menu-bars" aria-hidden="true" />
+            </button>
+          </div>
+        </nav>
+
+        <div id="mobile-menu" className="mobile-menu" aria-hidden={!menuOpen}>
+          <div className="shell mobile-menu-inner">
+            <ul>
+              {navLinks.map((link, i) => (
+                <li key={link.id} style={{ '--i': i } as CSSProperties}>
+                  <a href={`#${link.id}`} onClick={() => setMenuOpen(false)}>
+                    <span>{String(i + 1).padStart(2, '0')}</span>
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <a className="button button-primary mobile-menu-cta" href="#contact" onClick={() => setMenuOpen(false)}>Get in touch <span aria-hidden="true">↗</span></a>
+          </div>
         </div>
-        <button className="mode-toggle" type="button" onClick={() => setNightMode(!nightMode)} aria-label="Toggle color theme" aria-pressed={nightMode}>
-          <span className="mode-dot" aria-hidden="true" />
-          {nightMode ? 'day mode' : 'night mode'}
-        </button>
-      </nav>
+      </header>
 
       <section className="hero shell" id="main-content">
         <HeroBackdrop />
@@ -404,7 +496,7 @@ function App() {
             </li>
           ))}
         </ul>
-        <div className="contact-footer"><span>Rangga Danu Kusuma</span><span>Latest update: October 5, 2026</span><a href="https://github.com/RKPYI" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+        <div className="contact-footer"><span>Rangga Danu Kusuma</span><span>Latest update: October 6, 2026</span><a href="https://github.com/RKPYI" target="_blank" rel="noreferrer">GitHub ↗</a></div>
       </section>
       </main>
     </>
