@@ -51,6 +51,79 @@ const certificates = [
   },
 ]
 
+const profile = [
+  { label: 'Name', value: 'Rangga Danu Kusuma' },
+  { label: 'NIM', value: '26051204003' },
+  { label: 'Study program', value: 'B.S. in Computer Science (S1 Teknik Informatika)' },
+  { label: 'Education', value: 'Universitas Negeri Surabaya (2026 - now) · SMKN 1 Dlanggu (2023 - 2026)' },
+  { label: 'Current activity', value: 'Studying at UNESA and learning game development.' },
+]
+
+const stats = [
+  { value: '75%', label: 'faster API response after query optimization' },
+  { value: '2 yrs', label: 'as lab assistant, 2024 - 2025' },
+  { value: '3', label: 'projects in the selected work' },
+  { value: '3', label: 'certificates and competition results' },
+]
+
+const services = [
+  {
+    title: 'Web development',
+    description: 'Responsive websites and web apps built with React, Next.js, Laravel and Tailwind CSS, from landing pages to full platforms.',
+  },
+  {
+    title: 'Backend & REST APIs',
+    description: 'Modular, maintainable APIs in PHP and JavaScript with database design and query optimization on MySQL, MariaDB and PostgreSQL.',
+  },
+  {
+    title: 'Game development',
+    description: 'Roblox games in Lua and browser idle games, covering progression systems, game loops and balancing.',
+  },
+  {
+    title: 'UI design',
+    description: 'Interfaces with clear structure, careful typography and small animations that make a page feel alive.',
+  },
+  {
+    title: 'Hosting & server setup',
+    description: 'Deploying and configuring sites on Linux with Nginx or Apache, and on Vercel.',
+  },
+  {
+    title: 'Maintenance & Code Refactoring',
+    description: 'Cleaning up legacy code, fixing persistent bugs, upgrading outdated dependencies, and improving overall project architecture.',
+  }
+]
+
+const achievements = [
+  {
+    year: '2026',
+    title: 'Hack Club Stardance Challenge',
+    result: 'Certificate of Achievement · 3 projects · 76 hours',
+    level: 'International',
+    href: '/stardance-certificate.pdf',
+  },
+  {
+    year: '2025',
+    title: 'Jagoan Hosting Infra Competition',
+    result: 'Top 30',
+    level: 'National',
+    href: '/infra-competition-certificate.pdf',
+  },
+  {
+    year: '2025',
+    title: 'LKS Web Technologies',
+    result: 'Top 5',
+    level: 'Province (East Java)',
+    href: '/web-technologies-certificate.pdf',
+  },
+]
+
+const contactLinks = [
+  { label: 'Email', value: 'romagading@gmail.com', href: 'mailto:romagading@gmail.com' },
+  { label: 'GitHub', value: 'github.com/RKPYI', href: 'https://github.com/RKPYI' },
+  { label: 'LinkedIn', value: 'Rangga Danu Kusuma', href: 'https://www.linkedin.com/in/rangga-danu-kusuma-62b34a310/' },
+  { label: 'CV', value: 'Download CV', href: '/cv.pdf', download: true },
+]
+
 const technologyMarquee = [
   { name: 'PHP', icon: 'php/php-original.svg' },
   { name: 'JavaScript', icon: 'javascript/javascript-original.svg' },
@@ -104,7 +177,9 @@ function App() {
         <div className="nav-links">
           <a href="#work">Work</a>
           <a href="#about">About</a>
+          <a href="#services">Services</a>
           <a href="#journey">Journey</a>
+          <a href="#achievements">Achievements</a>
           <a href="#contact">Contact</a>
         </div>
         <button className="mode-toggle" type="button" onClick={() => setNightMode(!nightMode)} aria-label="Toggle color theme" aria-pressed={nightMode}>
@@ -136,12 +211,46 @@ function App() {
           <h2>Make it work.<br /><em>Make it feel good.</em></h2>
           <p>I am a university student at Universitas Negeri Surabaya, moving between web development, game development, and the small details that make an interface feel alive.</p>
         </div>
+        <div className="profile">
+          <dl className="profile-list">
+            {profile.map((item) => (
+              <div className="profile-row" key={item.label}>
+                <dt>{item.label}</dt>
+                <dd>{item.value}</dd>
+              </div>
+            ))}
+          </dl>
+          <ul className="stat-list" aria-label="Statistics">
+            {stats.map((stat) => (
+              <li key={stat.label}>
+                <strong>{stat.value}</strong>
+                <span>{stat.label}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
         <div className="skill-list" aria-label="Areas of practice">
           <span>Web development</span>
           <span>Game development</span>
           <span>UI design</span>
           <span>Backend development</span>
         </div>
+      </section>
+
+      <section className="services shell" id="services" aria-labelledby="services-title">
+        <div className="section-heading" data-aos="fade-up">
+          <p className="section-index">02 / What I can do</p>
+          <h2 id="services-title">Skills and services<br /><em>you can hire.</em></h2>
+        </div>
+        <div className="service-list">
+          {services.map((service, index) => (
+            <article className="service" key={`${service.title}-${index}`} data-aos="fade-up" data-aos-delay={(index % 3) * 100}>
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
+            </article>
+          ))}
+        </div>
+        <a className="all-work" href="#contact">Start a project <span aria-hidden="true">↘</span></a>
       </section>
 
       <section className="tech-section" aria-labelledby="technical-skills-title" data-aos="fade-up">
@@ -164,7 +273,7 @@ function App() {
       </section>
 
       <section className="journey shell" id="journey">
-        <p className="section-index">02 / Journey</p>
+        <p className="section-index">03 / Journey</p>
         <div className="journey-grid">
           <div className="journey-column" data-aos="fade-up">
             <h2>Work<br /><em>experience.</em></h2>
@@ -223,9 +332,40 @@ function App() {
         </div>
       </section>
 
+      <section className="achievements shell" id="achievements" aria-labelledby="achievements-title">
+        <div className="section-heading" data-aos="fade-up">
+          <p className="section-index">04 / Achievements</p>
+          <h2 id="achievements-title">Competitions<br /><em>and results.</em></h2>
+        </div>
+        <ul className="achievement-list">
+          {achievements.map((item, index) => {
+            const content = (
+              <>
+                <span className="achievement-year">{item.year}</span>
+                <span className="achievement-main">
+                  <strong>{item.title}</strong>
+                  <span>{item.result}</span>
+                </span>
+                <span className="achievement-level">{item.level}</span>
+                <span className="achievement-link" aria-hidden="true">{item.href ? '↗' : ''}</span>
+              </>
+            )
+            return (
+              <li key={`${item.title}-${index}`} data-aos="fade-up" data-aos-delay={index * 60}>
+                {item.href ? (
+                  <a className="achievement" href={item.href} target="_blank" rel="noreferrer">{content}</a>
+                ) : (
+                  <div className="achievement">{content}</div>
+                )}
+              </li>
+            )
+          })}
+        </ul>
+      </section>
+
       <section className="work shell" id="work">
         <div className="section-heading" data-aos="fade-up">
-          <p className="section-index">03 / Selected work</p>
+          <p className="section-index">05 / Selected work</p>
           <h2>Things I have<br /><em>been making.</em></h2>
         </div>
         <div className="project-list">
@@ -245,11 +385,25 @@ function App() {
       </section>
 
       <section className="contact shell" id="contact" data-aos="fade-up">
-        <p className="section-index">04 / Say hello</p>
+        <p className="section-index">06 / Say hello</p>
         <div className="contact-line">
           <h2>Have a good<br /><em>idea?</em></h2>
           <a className="contact-email" href="mailto:romagading@gmail.com">romagading<br />@gmail.com <span aria-hidden="true">↗</span></a>
         </div>
+        <ul className="contact-links" aria-label="Contact links">
+          {contactLinks.map((link) => (
+            <li key={link.label}>
+              <a
+                href={link.href}
+                {...(link.download ? { download: 'cv.pdf' } : {})}
+                {...(link.href.startsWith('http') ? { target: '_blank', rel: 'noreferrer' } : {})}
+              >
+                <span>{link.label}</span>
+                <strong>{link.value} <span aria-hidden="true">{link.download ? '↓' : '↗'}</span></strong>
+              </a>
+            </li>
+          ))}
+        </ul>
         <div className="contact-footer"><span>Rangga Danu Kusuma</span><span>Latest update: October 5, 2026</span><a href="https://github.com/RKPYI" target="_blank" rel="noreferrer">GitHub ↗</a></div>
       </section>
       </main>
