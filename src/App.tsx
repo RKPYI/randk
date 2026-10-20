@@ -33,7 +33,7 @@ const projects = [
 const certificates = [
   {
     title: 'Hack Club Stardance Challenge',
-    detail: 'Certificate of Achievement · 3 projects · 76 hours',
+    detail: 'Certificate of Achievement · 3 projects · 95 hours',
     image: '/stardance-certificate.jpg',
     href: '/stardance-certificate.pdf',
   },
@@ -97,7 +97,7 @@ const achievements = [
   {
     year: '2026',
     title: 'Hack Club Stardance Challenge',
-    result: 'Certificate of Achievement · 3 projects · 76 hours',
+    result: 'Certificate of Achievement · 3 projects · 95 hours',
     level: 'International',
     href: '/stardance-certificate.pdf',
   },
@@ -496,7 +496,7 @@ function App() {
             </li>
           ))}
         </ul>
-        <div className="contact-footer"><span>Rangga Danu Kusuma</span><span>Latest update: October 6, 2026</span><a href="https://github.com/RKPYI" target="_blank" rel="noreferrer">GitHub ↗</a></div>
+        <div className="contact-footer"><span>Rangga Danu Kusuma</span><span>Latest update: October 20, 2026</span><a href="https://github.com/RKPYI" target="_blank" rel="noreferrer">GitHub ↗</a></div>
       </section>
       </main>
     </>
