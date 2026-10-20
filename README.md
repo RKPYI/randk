@@ -58,7 +58,7 @@ A personal portfolio website built with **React**, **TypeScript**, and **Vite**.
 ```bash
 # Clone the repository
 git clone https://github.com/RKPYI/randk.git
-cd your-repo
+cd randk
 
 # Install dependencies from the lockfile
 npm install
